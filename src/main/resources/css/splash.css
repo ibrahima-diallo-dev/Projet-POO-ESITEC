@@ -1,0 +1,55 @@
+/* ============================================================
+   SPLASH SCREEN - ESITEC Cahier de Texte Numérique
+   ============================================================ */
+
+.splash-root {
+  -fx-background-color: #050d1a;
+  -fx-min-width: 1200;
+  -fx-min-height: 800;
+}
+
+/* Titre principal */
+.splash-title {
+  -fx-text-fill: #ffffff;
+  -fx-font-size: 26;
+  -fx-font-weight: bold;
+  -fx-effect: dropshadow(gaussian, rgba(37, 99, 235, 0.5), 12, 0.2, 0, 0);
+}
+
+/* Sous-titre */
+.splash-subtitle {
+  -fx-text-fill: #64748b;
+  -fx-font-size: 13;
+}
+
+/* Texte "Chargement en cours..." */
+.splash-loading {
+  -fx-text-fill: #94a3b8;
+  -fx-font-size: 13px;
+  -fx-font-style: italic;
+}
+
+/* Version */
+.splash-version {
+  -fx-text-fill: #334155;
+  -fx-font-size: 11;
+}
+
+/* Barre de progression indéterminée */
+.splash-progress {
+  -fx-accent: #0062ff;
+  -fx-pref-height: 8;
+  -fx-indeterminate-bar-length: 80;
+  -fx-indeterminate-bar-animation-time: 1.8;
+}
+
+.splash-progress .track {
+  -fx-background-color: #1e293b;
+  -fx-background-radius: 4;
+}
+
+.splash-progress .bar {
+  -fx-background-color: linear-gradient(to right, #1d4ed8, #3b82f6, #60a5fa);
+  -fx-background-radius: 4;
+  -fx-effect: dropshadow(gaussian, rgba(59, 130, 246, 0.8), 10, 0.4, 0, 0);
+}

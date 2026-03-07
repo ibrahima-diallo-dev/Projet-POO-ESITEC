@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox spacing="15.0" styleClass="content-pane"
+      xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="sn.esitec.poo.cahiertexte.controller.ChefController">
+
+    <padding>
+        <Insets bottom="25.0" left="30.0" right="30.0" top="25.0" />
+    </padding>
+
+    <children>
+        <Label styleClass="title-text" text="Rapports pédagogiques" />
+        <VBox spacing="10.0" styleClass="login-card" maxWidth="400">
+            <padding><Insets bottom="15.0" left="15.0" right="15.0" top="15.0" /></padding>
+            <Label styleClass="user-name-label" text="📄 Fiche de suivi" />
+            <ComboBox fx:id="pdfEnseignantCombo" maxWidth="Infinity" promptText="Filtrer par enseignant" />
+            <Button fx:id="genererPdfButton" maxWidth="Infinity" styleClass="danger-button" text="Générer PDF (iText)" />
+            <Label fx:id="pdfErrorLabel" styleClass="error-text" visible="false" managed="false"/>
+        </VBox>
+    </children>
+</VBox>

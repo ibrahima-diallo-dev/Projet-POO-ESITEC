@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox fx:id="rejetFormPane" spacing="20.0" styleClass="login-card" stylesheets="@../css/style.css" 
+      xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sn.esitec.poo.cahiertexte.controller.RejetFormController">
+      
+    <padding>
+        <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+    </padding>
+    <children>
+        <VBox spacing="5.0">
+            <children>
+                <Label styleClass="title-text" text="Motif du rejet" />
+                <Label styleClass="subtitle-text" text="Veuillez expliquer à l'enseignant pourquoi sa séance est rejetée." />
+            </children>
+        </VBox>
+
+        <VBox spacing="8.0">
+            <children>
+                <Label styleClass="input-label" text="Commentaire obligatoire" />
+                <TextArea fx:id="motifArea" prefHeight="120.0" promptText="Ex: Contenu incomplet, durée erronée..." styleClass="text-input" wrapText="true" />
+                <Label fx:id="errorLabel" styleClass="error-text" text="" />
+            </children>
+        </VBox>
+
+        <HBox alignment="CENTER_RIGHT" spacing="15.0">
+            <children>
+                <Button fx:id="cancelRejetButton" mnemonicParsing="false" styleClass="secondary-button" text="Annuler" />
+                <Button fx:id="confirmRejetButton" mnemonicParsing="false" styleClass="danger-button" text="Confirmer le rejet" />
+            </children>
+        </HBox>
+    </children>
+</VBox>

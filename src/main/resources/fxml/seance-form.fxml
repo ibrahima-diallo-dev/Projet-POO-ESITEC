@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox fx:id="seanceFormPane" spacing="20.0" styleClass="login-card" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+fx:controller="sn.esitec.poo.cahiertexte.controller.SeanceFormController">
+
+    <padding>
+        <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+    </padding>
+    <children>
+        <Label styleClass="title-text" text="Nouvelle Séance" />
+        
+        <GridPane hgap="15.0" vgap="15.0">
+            <children>
+                <VBox spacing="5.0" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                    <Label styleClass="input-label" text="Date" />
+                    <DatePicker fx:id="dateField" maxWidth="Infinity" styleClass="text-input" />
+                </VBox>
+                
+                <VBox spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                    <Label styleClass="input-label" text="Heure" />
+                    <TextField fx:id="heureField" promptText="HH:mm" styleClass="text-input" />
+                </VBox>
+                
+                <VBox spacing="5.0" GridPane.columnIndex="0" GridPane.rowIndex="1" GridPane.columnSpan="2">
+                    <Label styleClass="input-label" text="Cours" />
+                    <ComboBox fx:id="coursCombo" promptText="Sélectionnez un cours" styleClass="text-input" />
+                </VBox>
+                
+                <VBox spacing="5.0" GridPane.columnIndex="0" GridPane.rowIndex="2" GridPane.columnSpan="2">
+                    <Label styleClass="input-label" text="Durée (h)" />
+                    <TextField fx:id="dureeField" promptText="Ex: 2" styleClass="text-input" />
+                </VBox>
+
+                <VBox spacing="5.0" GridPane.columnIndex="0" GridPane.rowIndex="3" GridPane.columnSpan="2">
+                    <Label styleClass="input-label" text="Contenu du cours" />
+                    <TextArea fx:id="contenuArea" prefHeight="80.0" promptText="Détaillez le chapitre abordé..." styleClass="text-input" />
+                </VBox>
+
+                <VBox spacing="5.0" GridPane.columnIndex="0" GridPane.rowIndex="4" GridPane.columnSpan="2">
+                    <Label styleClass="input-label" text="Observations (Optionnel)" />
+                    <TextArea fx:id="observationsArea" prefHeight="60.0" styleClass="text-input" />
+                </VBox>
+            </children>
+        </GridPane>
+
+        <Label fx:id="errorLabel" styleClass="error-text" visible="false" managed="false" wrapText="true" />
+        <HBox alignment="CENTER_RIGHT" spacing="15.0">
+            <Button fx:id="cancelSeanceButton" styleClass="logout-button" text="Annuler" />
+            <Button fx:id="confirmSeanceButton" styleClass="primary-button" text="Enregistrer la séance" />
+        </HBox>
+    </children>
+</VBox>
