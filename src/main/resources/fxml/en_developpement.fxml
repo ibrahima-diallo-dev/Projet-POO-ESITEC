@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
+<VBox alignment="CENTER" styleClass="content-pane" 
+      stylesheets="@../css/style.css"
+      xmlns="http://javafx.com/javafx/17">
+    <Label styleClass="subtitle-text" text="🚧 En développement..." />
+</VBox>

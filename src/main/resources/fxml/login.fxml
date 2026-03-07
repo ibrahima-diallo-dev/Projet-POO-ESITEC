@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.HBox?>
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="CENTER" spacing="20.0"
+      styleClass="login-bg" stylesheets="@../css/style.css"
+      minWidth="1200.0" minHeight="800.0"
+      xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="sn.esitec.poo.cahiertexte.controller.LoginController">
+
+    <children>
+        <VBox alignment="TOP_CENTER" maxWidth="480.0" minWidth="340.0" spacing="25.0" styleClass="login-card">
+            <padding>
+                <Insets bottom="40.0" left="40.0" right="40.0" top="40.0"/>
+            </padding>
+            <children>
+
+                <!-- Logo + Titre -->
+                <VBox alignment="CENTER" spacing="12.0">
+                    <children>
+                        <ImageView fitHeight="90.0" fitWidth="90.0" preserveRatio="true" smooth="true">
+                            <image>
+                                <Image url="@../images/logo-supdeco.png"/>
+                            </image>
+                        </ImageView>
+                        <Label styleClass="title-text" text="Cahier de Texte Numérique"/>
+                        <Label styleClass="subtitle-text" text="Du cahier papier à une gestion pédagogique 100% numérique."/>
+                    </children>
+                </VBox>
+
+                <!-- Champs -->
+                <VBox spacing="15.0">
+                    <children>
+                        <VBox spacing="5.0">
+                            <Label styleClass="input-label" text="Adresse email"/>
+                            <TextField fx:id="usernameField" promptText="Ex: fatou.ndiaye@esitec.sn"
+                                       styleClass="text-input"/>
+                        </VBox>
+
+                        <VBox spacing="5.0">
+                            <Label styleClass="input-label" text="Mot de passe"/>
+                            <PasswordField fx:id="passwordField" promptText="••••••••"
+                                           styleClass="text-input"/>
+                        </VBox>
+
+                        <VBox spacing="5.0">
+                            <Label styleClass="input-label" text="Rôle"/>
+                            <ComboBox fx:id="roleCombo" prefWidth="400.0"
+                                      promptText="Choisir votre rôle" styleClass="combo-box">
+                                <items>
+                                    <FXCollections fx:factory="observableArrayList">
+                                        <String fx:value="Chef de département"/>
+                                        <String fx:value="Enseignant"/>
+                                        <String fx:value="Responsable de classe"/>
+                                    </FXCollections>
+                                </items>
+                            </ComboBox>
+                        </VBox>
+                    </children>
+                </VBox>
+
+                <!-- Bouton + Erreur -->
+                <VBox alignment="CENTER" spacing="15.0">
+                    <children>
+                        <Button fx:id="loginButton" defaultButton="true" maxWidth="Infinity"
+                                mnemonicParsing="false" styleClass="primary-button"
+                                text="Se connecter"/>
+                        <Label fx:id="errorLabel" styleClass="error-text" text="" wrapText="true"/>
+                    </children>
+                </VBox>
+                <HBox alignment="CENTER" spacing="5.0">
+                <children>
+                    <Label style="-fx-text-fill: #64748b;" text="Pas encore de compte ?" />
+                    <Button onAction="#handleVersInscription" styleClass="link-button" 
+                            style="-fx-background-color: transparent; -fx-text-fill: #1e40af; -fx-cursor: hand; -fx-padding: 0;" 
+                            text="Inscrivez-vous ici" />
+                </children>
+            </HBox>
+
+            </children>
+        </VBox>
+    </children>
+</VBox>

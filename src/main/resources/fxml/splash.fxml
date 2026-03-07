@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane
+      styleClass="splash-root"
+      stylesheets="@../css/splash.css"
+      xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="sn.esitec.poo.cahiertexte.controller.SplashController">
+
+    <VBox alignment="CENTER" spacing="28.0" maxWidth="640.0">
+        <padding><Insets bottom="60.0" left="60.0" right="60.0" top="60.0"/></padding>
+
+        <!-- Logo -->
+        <ImageView fx:id="logoImage" fitHeight="130.0" fitWidth="130.0" preserveRatio="true">
+            <image><Image url="@../images/logo-supdeco.png"/></image>
+        </ImageView>
+
+        <!-- Nom de l'app -->
+        <Label text="Cahier de Texte Numérique" styleClass="splash-title"/>
+
+       
+
+        <!-- Barre de progression -->
+        <VBox spacing="10.0" alignment="CENTER">
+            <ProgressBar fx:id="progressBar" prefWidth="320.0" prefHeight="8.0"
+                         progress="-1" styleClass="splash-progress"/>
+            <Label fx:id="chargementLabel" text="Chargement en cours..."
+                   styleClass="splash-loading"/>
+        </VBox>
+
+        
+    </VBox>
+
+</StackPane>

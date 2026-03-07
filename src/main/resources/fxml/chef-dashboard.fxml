@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="20.0" styleClass="content-pane"
+      xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" 
+      fx:controller="sn.esitec.poo.cahiertexte.controller.ChefController">
+
+    <padding>
+        <Insets bottom="25.0" left="30.0" right="30.0" top="25.0" />
+    </padding>
+
+    <children>
+        <HBox alignment="CENTER_LEFT">
+            <VBox spacing="5.0">
+                <Label styleClass="title-text" text="Tableau de Bord — Chef de Département" />
+                <Label styleClass="subtitle-text" text="Vue globale et gestion des utilisateurs" />
+            </VBox>
+        </HBox>
+
+        <HBox spacing="15.0">
+            <VBox spacing="8.0" styleClass="stat-card" HBox.hgrow="ALWAYS">
+                <Label styleClass="stat-icon" text="📚" />
+                <Label fx:id="totalSeancesLabel" styleClass="stat-value" text="0" />
+                <Label styleClass="stat-title" text="Séances Total" />
+            </VBox>
+            <VBox spacing="8.0" styleClass="stat-card" HBox.hgrow="ALWAYS">
+                <Label styleClass="stat-icon" text="📊" />
+                <Label fx:id="tauxValidationLabel" styleClass="stat-value" text="0%" />
+                <Label styleClass="stat-title" text="Taux Validation" />
+            </VBox>
+            <VBox spacing="8.0" styleClass="stat-card" HBox.hgrow="ALWAYS">
+                <Label styleClass="stat-icon" text="✅" />
+                <Label fx:id="seancesValidesLabel" styleClass="stat-value" text="0" />
+                <Label styleClass="stat-title" text="Séances Validées" />
+            </VBox>
+            <VBox spacing="8.0" styleClass="stat-card" HBox.hgrow="ALWAYS">
+                <Label styleClass="stat-icon" text="👨‍🏫" />
+                <Label fx:id="enseignantsActifsLabel" styleClass="stat-value" text="0" />
+                <Label styleClass="stat-title" text="Enseignants Actifs" />
+            </VBox>
+        </HBox>
+
+        <HBox spacing="20.0" VBox.vgrow="ALWAYS">
+            <VBox spacing="12.0" HBox.hgrow="ALWAYS">
+                <HBox alignment="CENTER_LEFT">
+                    <VBox spacing="3.0">
+                        <Label styleClass="title-text" text="Comptes en attente" />
+                        <Label fx:id="comptesAttenteLabel" styleClass="subtitle-text" text="0 compte(s) en attente" />
+                    </VBox>
+                    <Region HBox.hgrow="ALWAYS" />
+                    <HBox spacing="10.0">
+                        <Button fx:id="ajouterUtilisateurButton" styleClass="secondary-button" text="+ Ajouter utilisateur" />
+                        <Button fx:id="validerCompteButton" styleClass="primary-button" text="✓ Valider le compte" />
+                    </HBox>
+                </HBox>
+                <VBox styleClass="table-container" VBox.vgrow="ALWAYS">
+                    <TableView fx:id="comptesTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="colNom" text="Nom" />
+                            <TableColumn fx:id="colPrenom" text="Prénom" />
+                            <TableColumn fx:id="colEmail" text="Email" />
+                            <TableColumn fx:id="colRole" text="Rôle" />
+                            <TableColumn fx:id="colStatutCompte" text="Statut" />
+                        </columns>
+                        <columnResizePolicy><TableView fx:constant="CONSTRAINED_RESIZE_POLICY" /></columnResizePolicy>
+                    </TableView>
+                </VBox>
+            </VBox>
+
+            <VBox spacing="15.0" prefWidth="320.0">
+                <VBox spacing="10.0" styleClass="login-card">
+                    <padding><Insets bottom="15.0" left="15.0" right="15.0" top="15.0" /></padding>
+                    <Label styleClass="user-name-label" text="📎 Assigner un cours" />
+                    <ComboBox fx:id="enseignantCombo" maxWidth="Infinity" promptText="Choisir un enseignant" />
+                    <ComboBox fx:id="classeCombo" maxWidth="Infinity" promptText="Choisir une classe" />
+                    <TextField fx:id="nomCoursField" promptText="Nom de la matière" />
+                    <Button fx:id="assignerCoursButton" maxWidth="Infinity" styleClass="primary-button" text="Assigner le cours" />
+                    <Label fx:id="assignErrorLabel" styleClass="error-text" visible="false" managed="false"/>
+                </VBox>
+
+                <VBox spacing="10.0" styleClass="login-card">
+                    <padding><Insets bottom="15.0" left="15.0" right="15.0" top="15.0" /></padding>
+                    <Label styleClass="user-name-label" text="📄 Fiche de suivi" />
+                    <ComboBox fx:id="pdfEnseignantCombo" maxWidth="Infinity" promptText="Filtrer par enseignant" />
+                    <Button fx:id="genererPdfButton" maxWidth="Infinity" styleClass="danger-button" text="Générer PDF (iText)" />
+                    <Label fx:id="pdfErrorLabel" styleClass="error-text" visible="false" managed="false"/>
+                </VBox>
+            </VBox>
+        </HBox>
+    </children>
+</VBox>

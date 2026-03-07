@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+
+<BorderPane fx:id="mainContainer" prefHeight="720.0" prefWidth="1080.0" styleClass="main-bg" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" 
+fx:controller="sn.esitec.poo.cahiertexte.controller.MainController">
+
+
+    
+    <top>
+        <HBox alignment="CENTER_LEFT" prefHeight="65.0" spacing="20.0" styleClass="header-bg" BorderPane.alignment="CENTER">
+            <padding>
+                <Insets left="20.0" right="20.0" />
+            </padding>
+            <children>
+                <ImageView fitHeight="45.0" fitWidth="45.0" preserveRatio="true">
+                    <image><Image url="@../images/logo-supdeco.png" /></image>
+                </ImageView>
+                <Button fx:id="themeToggleButton" text="🌙" styleClass="theme-toggle"
+                  mnemonicParsing="false" />
+                <Region HBox.hgrow="ALWAYS" />
+                <Region HBox.hgrow="ALWAYS" />
+                <VBox alignment="CENTER_RIGHT" spacing="2.0">
+                    <children>
+                        <Label fx:id="userNameLabel" styleClass="user-name-label" text="Pr. Mamadou DIOP" />
+                        <Label fx:id="userRoleLabel" styleClass="user-role-label" text="ENSEIGNANT" />
+                    </children>
+                </VBox>
+                <Button fx:id="logoutButton" mnemonicParsing="false" styleClass="logout-button" text="Déconnexion" />
+            </children>
+        </HBox>
+    </top>
+
+    <left>
+        <VBox prefWidth="240.0" spacing="10.0" styleClass="sidebar-bg" BorderPane.alignment="CENTER">
+            <padding>
+                <Insets bottom="20.0" left="15.0" right="15.0" top="30.0" />
+            </padding>
+            <children>
+                <Label styleClass="sidebar-title" text="NAVIGATION" />
+                <Separator opacity="0.1" prefWidth="200.0" />
+                
+                <Button fx:id="navBtn1" alignment="BASELINE_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="nav-button, nav-active" text="Tableau de bord" />
+                <Button fx:id="navBtn2" alignment="BASELINE_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="nav-button" text="Cahier de texte" />
+                <Button fx:id="navBtn3" alignment="BASELINE_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="nav-button" text="Statistiques" />
+                
+                <Region VBox.vgrow="ALWAYS" />
+                
+            </children>
+        </VBox>
+    </left>
+
+    <center>
+    <VBox fx:id="contentArea" spacing="0" BorderPane.alignment="CENTER" VBox.vgrow="ALWAYS">
+        <children>
+            <Label styleClass="selection-text" 
+                   text="Sélectionnez une option dans la sidebar pour commencer." />
+        </children>
+    </VBox>
+</center>
+    
+</BorderPane>
