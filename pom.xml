@@ -148,6 +148,7 @@
                         </goals>
                         <configuration>
                             <outputFile>${project.build.directory}/cahier-texte-app.jar</outputFile>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <mainClass>sn.esitec.poo.cahiertexte.Launcher</mainClass>
