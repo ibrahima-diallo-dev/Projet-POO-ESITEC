@@ -14,6 +14,7 @@ import sn.esitec.poo.cahiertexte.model.Seance;
 import sn.esitec.poo.cahiertexte.model.StatutSeance;
 import sn.esitec.poo.cahiertexte.model.Utilisateur;
 
+import java.io.File;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -28,9 +29,8 @@ import java.util.List;
  * séances.
  * </p>
  * <p>
- * Le fichier généré est enregistré dans le répertoire courant de
- * l'application sous le nom :
- * {@code fiche_suivi_<prenom>_<nom>.pdf}
+ * Le fichier généré est enregistré à l'emplacement choisi par l'utilisateur.
+ * Une surcharge permet aussi un emplacement par défaut dans le répertoire courant.
  * </p>
  */
 public class PdfGenerator {
@@ -47,18 +47,15 @@ public class PdfGenerator {
      * </ul>
      * </p>
      *
-     * @param user    Utilisateur (enseignant) dont on génère la fiche
-     * @param seances Liste des séances à inclure dans le document
+         * @param user     Utilisateur (enseignant) dont on génère la fiche
+         * @param seances  Liste des séances à inclure dans le document
+         * @param filePath Chemin complet du PDF à générer
      */
-    public static void generateFicheSuivi(Utilisateur user, List<Seance> seances) {
-        String fileName = System.getProperty("user.dir") + "\\fiche_suivi_"
-        + user.getPrenom().toLowerCase() + "_"
-        + user.getNom().toLowerCase() + ".pdf";
-
-        try {
-            PdfWriter writer = new PdfWriter(fileName);
-            PdfDocument pdf = new PdfDocument(writer);
-            Document doc = new Document(pdf);
+        public static void generateFicheSuivi(Utilisateur user, List<Seance> seances, String filePath) {
+                try {
+                        PdfWriter writer = new PdfWriter(filePath);
+                        PdfDocument pdf = new PdfDocument(writer);
+                        Document doc = new Document(pdf);
 
             DeviceRgb bleuEsitec = new DeviceRgb(30, 58, 138);
             DeviceRgb grisClair  = new DeviceRgb(241, 245, 249);
@@ -157,13 +154,28 @@ public class PdfGenerator {
                     .setTextAlignment(TextAlignment.CENTER));
 
             doc.close();
-            System.out.println("PDF généré : " + fileName);
+                        System.out.println("PDF généré : " + filePath);
 
         } catch (Exception e) {
             System.err.println("Erreur génération PDF : " + e.getMessage());
             e.printStackTrace();
+                        throw new RuntimeException("Impossible de générer le PDF", e);
         }
     }
+
+        /**
+         * Génère la fiche PDF dans le dossier courant avec un nom par défaut.
+         *
+         * @param user    Utilisateur (enseignant)
+         * @param seances Liste des séances
+         */
+        public static void generateFicheSuivi(Utilisateur user, List<Seance> seances) {
+                String fileName = "fiche_suivi_"
+                                + user.getPrenom().toLowerCase() + "_"
+                                + user.getNom().toLowerCase() + ".pdf";
+                String filePath = new File(System.getProperty("user.dir"), fileName).getAbsolutePath();
+                generateFicheSuivi(user, seances, filePath);
+        }
 
     private static Cell statCell(String label, String valeur, DeviceRgb bg) {
         return new Cell()

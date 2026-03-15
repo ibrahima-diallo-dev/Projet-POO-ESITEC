@@ -10,6 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -22,6 +23,7 @@ import sn.esitec.poo.cahiertexte.service.GestionSeanceService;
 import sn.esitec.poo.cahiertexte.utils.PdfGenerator;
 import sn.esitec.poo.cahiertexte.utils.SessionManager;
 
+import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -241,8 +243,20 @@ public class EnseignantController {
      */
     private void handleGeneratePdf() {
         try {
-            PdfGenerator.generateFicheSuivi(currentUser, seanceList);
-            new Alert(Alert.AlertType.INFORMATION, "PDF généré !").showAndWait();
+            FileChooser chooser = new FileChooser();
+            chooser.setTitle("Enregistrer la fiche de suivi PDF");
+            chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Fichiers PDF", "*.pdf"));
+            chooser.setInitialFileName("fiche_suivi_"
+                    + currentUser.getPrenom().toLowerCase() + "_"
+                    + currentUser.getNom().toLowerCase() + ".pdf");
+
+            File destination = chooser.showSaveDialog(generatePdfButton.getScene().getWindow());
+            if (destination == null) {
+                return;
+            }
+
+            PdfGenerator.generateFicheSuivi(currentUser, seanceList, destination.getAbsolutePath());
+            new Alert(Alert.AlertType.INFORMATION, "PDF généré : " + destination.getAbsolutePath()).showAndWait();
         } catch (Exception e) { e.printStackTrace(); }
     }
 

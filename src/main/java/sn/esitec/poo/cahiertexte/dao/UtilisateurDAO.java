@@ -61,7 +61,7 @@ public class UtilisateurDAO {
      */
     public int ajouterUtilisateur(Utilisateur u, String mot_de_passe) {
         String sql = "INSERT INTO utilisateurs (nom_user, prenom_user, email, mot_de_passe, " +
-                     "role, statut, date_creation) VALUES (?, ?, ?, ?, ?, 'EN_ATTENTE', NOW())";
+                     "role, statut, date_creation) VALUES (?, ?, ?, ?, ?, 'EN_ATTENTE', CURRENT_TIMESTAMP)";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
@@ -243,13 +243,14 @@ public class UtilisateurDAO {
         String email       = rs.getString("email");
         String statut      = rs.getString("statut");
 
-        Timestamp ts1 = rs.getTimestamp("date_creation");
-        LocalDateTime date_creation = (ts1 != null) ? ts1.toLocalDateTime() : null;
+        // SQLite stocke les dates en TEXT "yyyy-MM-dd HH:mm:ss", getTimestamp()
+        // peut planter selon la version du driver. On lit en String pour être sûr.
+        String rawCreation    = rs.getString("date_creation");
+        String rawInscription = rs.getString("date_inscription");
+        LocalDateTime date_creation    = parseDatetime(rawCreation);
+        LocalDateTime date_inscription = parseDatetime(rawInscription);
 
-        Timestamp ts2 = rs.getTimestamp("date_inscription");
-        LocalDateTime date_inscription = (ts2 != null) ? ts2.toLocalDateTime() : null;
-
-        Role role = Role.fromString(rs.getString("role"));  // ✅ String → enum
+        Role role = Role.fromString(rs.getString("role"));
 
         if (role == Role.ENSEIGNANT) {
             return new Enseignant(id_user, nom_user, prenom_user, email,
@@ -265,39 +266,29 @@ public class UtilisateurDAO {
                                    role, statut, date_creation, date_inscription);
         }
     }
-    public ObservableList<Utilisateur> getAllValidUsers() {
-    ObservableList<Utilisateur> users = FXCollections.observableArrayList();
-    String query = "SELECT * FROM utilisateurs WHERE statut = 'VALIDE'";
-    
-    try (Connection conn = DatabaseConnection.getConnection();
-         PreparedStatement ps = conn.prepareStatement(query);
-         ResultSet rs = ps.executeQuery()) {
-         
-        while (rs.next()) {
-    // 1. Convertir le String de la BDD en Enum Role
-    Role roleEnum = Role.valueOf(rs.getString("role").toUpperCase());
 
-    // 2. Récupérer les dates (si elles sont null en BDD, on met la date actuelle)
-    LocalDateTime dateC = rs.getTimestamp("date_creation") != null ? 
-                         rs.getTimestamp("date_creation").toLocalDateTime() : LocalDateTime.now();
-    LocalDateTime dateI = rs.getTimestamp("date_inscription") != null ? 
-                         rs.getTimestamp("date_inscription").toLocalDateTime() : LocalDateTime.now();
-
-    // 3. Appeler le constructeur avec les 8 paramètres
-    users.add(new Utilisateur(
-        rs.getInt("id_user"),
-        rs.getString("nom"),        // Vérifie si c'est "nom" ou "nom_user" en BDD
-        rs.getString("prenom"),     // Vérifie si c'est "prenom" ou "prenom_user"
-        rs.getString("email"),
-        roleEnum,                   // On envoie l'objet Role, pas le String
-        rs.getString("statut"),
-        dateC,
-        dateI
-    ));
-}
-    } catch (SQLException e) {
-        e.printStackTrace();
+    /** Parse une chaîne SQLite "yyyy-MM-dd HH:mm:ss" en LocalDateTime. */
+    private static LocalDateTime parseDatetime(String raw) {
+        if (raw == null || raw.isBlank()) return LocalDateTime.now();
+        try {
+            // Cas "yyyy-MM-dd HH:mm:ss" → remplace l'espace par 'T' pour ISO
+            return LocalDateTime.parse(raw.trim().replace(" ", "T"));
+        } catch (Exception e) {
+            return LocalDateTime.now();
+        }
     }
-    return users;
-}
+    public ObservableList<Utilisateur> getAllValidUsers() {
+        ObservableList<Utilisateur> users = FXCollections.observableArrayList();
+        String query = "SELECT * FROM utilisateurs WHERE statut = 'VALIDE'";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(query);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                users.add(construireUtilisateur(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return users;
+    }
 }

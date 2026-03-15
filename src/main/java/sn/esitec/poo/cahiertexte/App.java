@@ -3,6 +3,7 @@ package sn.esitec.poo.cahiertexte;
 import javafx.application.Application;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import sn.esitec.poo.cahiertexte.utils.DatabaseInitializer;
 import sn.esitec.poo.cahiertexte.utils.SceneUtils;
 
 import java.util.Objects;
@@ -20,10 +21,13 @@ public class App extends Application {
     @Override
     public void start(Stage primaryStage) {
         try {
-            // 1. Configuration de l'icône de l'application
+            // 1. Initialisation de la base SQLite (crée le fichier + données si absent)
+            DatabaseInitializer.initialize();
+
+            // 2. Configuration de l'icône de l'application
             setupAppIcon(primaryStage);
 
-            // 2. Chargement de la scène initiale (géré en plein écran par SceneUtils)
+            // 3. Chargement de la scène initiale (géré en plein écran par SceneUtils)
             SceneUtils.loadScene(LOGIN_FXML, primaryStage, APP_TITLE);
             primaryStage.setWidth(1200);
         primaryStage.setHeight(800);

@@ -6,18 +6,16 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import sn.esitec.poo.cahiertexte.dao.ClasseDAO;
 import sn.esitec.poo.cahiertexte.dao.CoursDAO;
 import sn.esitec.poo.cahiertexte.dao.SeanceDAO;
 import sn.esitec.poo.cahiertexte.model.*;
 import sn.esitec.poo.cahiertexte.service.CompteService;
 import sn.esitec.poo.cahiertexte.service.EmailService;
+import sn.esitec.poo.cahiertexte.utils.PdfGenerator;
 
-import com.itextpdf.kernel.pdf.PdfWriter;
-import com.itextpdf.kernel.pdf.PdfDocument;
-import com.itextpdf.layout.Document;
-import com.itextpdf.layout.element.Paragraph;
-
+import java.io.File;
 import java.util.List;
 
 /**
@@ -286,26 +284,22 @@ public class ChefController {
                 + enseignant.getNom().toLowerCase() + ".pdf";
 
         try {
-            PdfWriter writer = new PdfWriter(fileName);
-            PdfDocument pdf  = new PdfDocument(writer);
-            Document doc     = new Document(pdf);
+            FileChooser chooser = new FileChooser();
+            chooser.setTitle("Enregistrer le rapport PDF");
+            chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Fichiers PDF", "*.pdf"));
+            chooser.setInitialFileName(fileName.substring(fileName.lastIndexOf('\\') + 1));
+            File destination = chooser.showSaveDialog(genererPdfButton.getScene().getWindow());
+            if (destination == null) {
+                return;
+            }
 
-            doc.add(new Paragraph("Fiche de suivi pédagogique — ESITEC 2026").setBold());
-            doc.add(new Paragraph("Enseignant : " + enseignant.getPrenom() + " " + enseignant.getNom()));
-            doc.add(new Paragraph(" "));
-            doc.add(new Paragraph("Statistiques :"));
-            doc.add(new Paragraph("- Total séances : " + total));
-            doc.add(new Paragraph("- Séances validées : " + validees));
-            doc.add(new Paragraph("- Séances en attente : " + attente));
-            doc.add(new Paragraph("- Séances rejetées : " + rejetees));
-            doc.add(new Paragraph(String.format("- Taux de validation : %.1f%%", taux)));
-            doc.close();
+            PdfGenerator.generateFicheSuivi(enseignant, seancesEns, destination.getAbsolutePath());
 
             if (pdfErrorLabel != null) {
                 pdfErrorLabel.setVisible(false);
                 pdfErrorLabel.setManaged(false);
             }
-            showNotification("PDF généré", "Fichier créé : " + fileName);
+            showNotification("PDF généré", "Fichier créé : " + destination.getAbsolutePath());
         } catch (Exception ex) {
             ex.printStackTrace();
             showNotification("Erreur", "Impossible de générer le PDF : " + ex.getMessage());

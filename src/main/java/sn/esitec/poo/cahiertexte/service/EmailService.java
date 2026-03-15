@@ -30,6 +30,9 @@ public class EmailService {
     private static final String SMTP_PORT = getConfig("mail.smtp.port", "587");
     private static final String EMAIL_FROM = getConfig("mail.from", "");
     private static final String EMAIL_PASSWORD = getConfig("mail.password", "");
+    private static final String REDIRECT_ALL_TO = getConfig("mail.redirect.all.to", "");
+    private static final String REDIRECT_ENSEIGNANT_TO = getConfig("mail.redirect.enseignant.to", "");
+    private static final String REDIRECT_RESPONSABLE_TO = getConfig("mail.redirect.responsable.to", "");
 
     /**
      * Envoie un email via SMTP avec authentification STARTTLS.
@@ -109,6 +112,7 @@ public class EmailService {
      */
     public static void notifierAssignationCours(String emailEnseignant, String nomEnseignant,
                                                  String prenomEnseignant, String matiere) {
+        String destinataire = resolveDestinataire(emailEnseignant, "ENSEIGNANT");
         String sujet = "Nouveau cours assigne - ESITEC";
         String message = "Bonjour " + prenomEnseignant + " " + nomEnseignant + ",\n\n"
                 + "Le Chef de Departement vous a assigne le cours suivant :\n"
@@ -117,7 +121,7 @@ public class EmailService {
                 + "a saisir vos seances.\n\n"
                 + "Cordialement,\n"
                 + "Systeme Cahier de Texte - ESITEC 2026";
-        envoyerNotification(emailEnseignant, sujet, message);
+        envoyerNotification(destinataire, sujet, message);
     }
 
     /**
@@ -129,13 +133,14 @@ public class EmailService {
      */
     public static void notifierValidation(String emailEnseignant, String nomEnseignant,
                                           String contenuSeance) {
+        String destinataire = resolveDestinataire(emailEnseignant, "ENSEIGNANT");
         String sujet = "✅ Séance validée - Cahier de Texte ESITEC";
         String message = "Bonjour " + nomEnseignant + ",\n\n"
                 + "Votre séance a été validée par le responsable de classe.\n\n"
                 + "Contenu : " + contenuSeance + "\n\n"
                 + "Cordialement,\n"
                 + "Système Cahier de Texte — ESITEC 2026";
-        envoyerNotification(emailEnseignant, sujet, message);
+        envoyerNotification(destinataire, sujet, message);
     }
 
     /**
@@ -148,6 +153,7 @@ public class EmailService {
      */
     public static void notifierRejet(String emailEnseignant, String nomEnseignant,
                                      String contenuSeance, String motif) {
+        String destinataire = resolveDestinataire(emailEnseignant, "ENSEIGNANT");
         String sujet = "❌ Séance rejetée - Cahier de Texte ESITEC";
         String message = "Bonjour " + nomEnseignant + ",\n\n"
                 + "Votre séance a été rejetée par le responsable de classe.\n\n"
@@ -156,7 +162,7 @@ public class EmailService {
                 + "Veuillez corriger et resoumettre.\n\n"
                 + "Cordialement,\n"
                 + "Système Cahier de Texte — ESITEC 2026";
-        envoyerNotification(emailEnseignant, sujet, message);
+        envoyerNotification(destinataire, sujet, message);
     }
 
     /**
@@ -180,6 +186,7 @@ public class EmailService {
             String matiere,
             String dateSeance,
             String contenuSeance) {
+        String destinataire = resolveDestinataire(emailResponsable, "RESPONSABLE");
         String sujet = "Nouvelle seance a valider - Cahier de Texte ESITEC";
         String message = "Bonjour " + prenomResponsable + " " + nomResponsable + ",\n\n"
                 + "Une nouvelle seance a ete saisie et attend votre validation.\n\n"
@@ -190,6 +197,29 @@ public class EmailService {
                 + "Connectez-vous au tableau Responsable pour valider ou rejeter.\n\n"
                 + "Cordialement,\n"
                 + "Systeme Cahier de Texte - ESITEC 2026";
-        envoyerNotification(emailResponsable, sujet, message);
+        envoyerNotification(destinataire, sujet, message);
+    }
+
+    /**
+     * Permet de rediriger les notifications en mode démo sans modifier
+     * les emails des utilisateurs en base (utile pour conserver des logins stables).
+     */
+    private static String resolveDestinataire(String destinataireOriginal, String typeNotification) {
+        String redirection = "";
+
+        if (!REDIRECT_ALL_TO.isBlank()) {
+            redirection = REDIRECT_ALL_TO;
+        } else if ("ENSEIGNANT".equals(typeNotification) && !REDIRECT_ENSEIGNANT_TO.isBlank()) {
+            redirection = REDIRECT_ENSEIGNANT_TO;
+        } else if ("RESPONSABLE".equals(typeNotification) && !REDIRECT_RESPONSABLE_TO.isBlank()) {
+            redirection = REDIRECT_RESPONSABLE_TO;
+        }
+
+        if (!redirection.isBlank()) {
+            System.out.println("📬 Redirection email: " + destinataireOriginal + " -> " + redirection);
+            return redirection;
+        }
+
+        return destinataireOriginal;
     }
 }

@@ -4,6 +4,11 @@ import sn.esitec.poo.cahiertexte.model.Seance;
 import sn.esitec.poo.cahiertexte.model.StatutSeance;
 import sn.esitec.poo.cahiertexte.utils.DatabaseConnection;
 import java.sql.*;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,8 +38,9 @@ public class SeanceDAO {
                      "observations, id_cours, id_enseignant) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setDate(1, Date.valueOf(s.getDateSeance()));
-            ps.setTime(2, Time.valueOf(s.getHeureDebut()));
+            // Stockage homogène en texte ISO pour éviter les variations de format du driver SQLite.
+            ps.setString(1, s.getDateSeance().toString());
+            ps.setString(2, s.getHeureDebut().toString());
             ps.setInt(3, s.getDuree());
             ps.setString(4, s.getContenu());
             ps.setString(5, s.getObservations());
@@ -64,8 +70,8 @@ public class SeanceDAO {
                      "contenu=?, observations=? WHERE id_seance=? AND statut='EN_ATTENTE'";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setDate(1, Date.valueOf(s.getDateSeance()));
-            ps.setTime(2, Time.valueOf(s.getHeureDebut()));
+            ps.setString(1, s.getDateSeance().toString());
+            ps.setString(2, s.getHeureDebut().toString());
             ps.setInt(3, s.getDuree());
             ps.setString(4, s.getContenu());
             ps.setString(5, s.getObservations());
@@ -236,10 +242,13 @@ public class SeanceDAO {
      * @throws SQLException en cas d'erreur de lecture
      */
     private Seance construireSeance(ResultSet rs) throws SQLException {
+        // Accepte plusieurs formats historiques en base (ISO texte, datetime, epoch millis).
+        LocalDate date = parseDateFlexible(rs.getString("date_seance"));
+        LocalTime heure = parseTimeFlexible(rs.getString("heure_debut"));
         return new Seance(
             rs.getInt("id_seance"),
-            rs.getDate("date_seance").toLocalDate(),
-            rs.getTime("heure_debut").toLocalTime(),
+            date,
+            heure,
             rs.getInt("duree"),
             rs.getString("contenu"),
             rs.getString("observations"),
@@ -248,5 +257,64 @@ public class SeanceDAO {
             rs.getInt("id_cours"),
             rs.getInt("id_enseignant")
         );
+    }
+
+    private LocalDate parseDateFlexible(String raw) {
+        if (raw == null || raw.isBlank()) {
+            return LocalDate.now();
+        }
+
+        String value = raw.trim();
+        if (value.matches("^-?\\d+$")) {
+            long epoch = Long.parseLong(value);
+            if (value.length() <= 10) {
+                epoch *= 1000L;
+            }
+            return Instant.ofEpochMilli(epoch)
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
+        }
+
+        try {
+            return LocalDate.parse(value);
+        } catch (Exception ignored) {
+            // continue
+        }
+
+        try {
+            return LocalDateTime.parse(value.replace(" ", "T")).toLocalDate();
+        } catch (Exception ignored) {
+            return LocalDate.now();
+        }
+    }
+
+    private LocalTime parseTimeFlexible(String raw) {
+        if (raw == null || raw.isBlank()) {
+            return LocalTime.MIDNIGHT;
+        }
+
+        String value = raw.trim();
+        if (value.matches("^-?\\d+$")) {
+            long epoch = Long.parseLong(value);
+            if (value.length() <= 10) {
+                epoch *= 1000L;
+            }
+            return Instant.ofEpochMilli(epoch)
+                .atZone(ZoneId.systemDefault())
+                .toLocalTime()
+                .withNano(0);
+        }
+
+        try {
+            return LocalTime.parse(value);
+        } catch (Exception ignored) {
+            // continue
+        }
+
+        try {
+            return LocalDateTime.parse(value.replace(" ", "T")).toLocalTime().withNano(0);
+        } catch (Exception ignored) {
+            return LocalTime.MIDNIGHT;
+        }
     }
 }

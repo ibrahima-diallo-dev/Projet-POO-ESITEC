@@ -55,13 +55,6 @@
             <classifier>win</classifier>
         </dependency>
 
-        <!-- MySQL JDBC -->
-        <dependency>
-            <groupId>com.mysql</groupId>
-            <artifactId>mysql-connector-j</artifactId>
-            <version>8.0.33</version>
-        </dependency>
-
         <!-- SQLite JDBC -->
         <dependency>
             <groupId>org.xerial</groupId>
